@@ -51,7 +51,11 @@ public class MultiQueueImpl<T, Q> implements MultiQueue<T, Q>{
     @Override
     public T dequeue(Q queue) {
         if(availableQueues().contains(queue)){
-            return queues.get(queue).remove();
+            if (queues.get(queue).isEmpty()) {
+                return null;
+            } else {
+                return queues.get(queue).remove();
+            }
         }
         else{
             throw new IllegalArgumentException("Queue is not available.");
@@ -102,7 +106,7 @@ public class MultiQueueImpl<T, Q> implements MultiQueue<T, Q>{
             throw new IllegalArgumentException("Queue is not available.");
         }
 
-        if (availableQueues().isEmpty()) {
+        if (availableQueues().size() == 1) {
             throw new IllegalStateException("No queue available for reallocation.");
         }
         
